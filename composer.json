@@ -1,0 +1,47 @@
+{
+  "name": "contao-themes-shop/vacancy-calendar",
+  "type": "contao-bundle",
+  "description": "Contao bundle to show vacancy of different objects in monthly calendars",
+  "keywords": [
+    "contao",
+    "vacancy",
+    "calendar"
+  ],
+  "homepage": "https://contao.org",
+  "license": "LGPL-3.0-or-later",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Christopher Boelter",
+      "email": "support@contao-themes-shop.de"
+    }
+  ],
+  "require": {
+    "php": "^7.2 || ^8.0",
+    "codefog/contao-haste": "^4.25",
+    "contao/core-bundle": "^4.9",
+    "contao-community-alliance/meta-palettes": "^2.0",
+    "nesbot/carbon": "^2.53",
+    "netzmacht/contao-toolkit": "^3.6"
+  },
+  "conflict": {
+    "contao/manager-plugin": "<2.0 || >=3.0"
+  },
+  "require-dev": {
+    "contao/manager-plugin": "^2.0",
+    "contao/easy-coding-standard": "^3.4"
+  },
+  "extra": {
+    "contao-manager-plugin": "ContaoThemesShop\\VacancyCalendar\\ContaoManager\\Plugin"
+  },
+  "autoload": {
+    "psr-4": {
+      "ContaoThemesShop\\VacancyCalendar\\": "src/"
+    }
+  },
+  "scripts": {
+    "cs-fixer": [
+      "vendor/bin/ecs check src --fix --ansi"
+    ]
+  }
+}

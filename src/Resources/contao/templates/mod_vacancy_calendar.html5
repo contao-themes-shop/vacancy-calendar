@@ -1,0 +1,56 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<?php if ($this->styles): ?>
+    <style>
+        .<?= $this->class; ?> .empty {
+            background-color: #<?= $this->styles['vc_color_empty'][0]; ?>;
+        }
+
+        .<?= $this->class; ?> .vacant {
+            background-color: #<?= $this->styles['vc_color_vacant'][0]; ?>;
+        }
+
+        .<?= $this->class; ?> .full {
+            background-color: #<?= $this->styles['vc_color_full'][0]; ?>;
+        }
+
+        .<?= $this->class; ?> .begin {
+            background-color: #ff000;
+            background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%, #<?= $this->styles['vc_color_full'][0]; ?> 50%);
+        }
+
+        .<?= $this->class; ?> .end {
+            background-color: #ff000;
+            background-image: -webkit-linear-gradient(30deg, #<?= $this->styles['vc_color_full'][0]; ?> 50%, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%);
+        }
+    </style>
+<?php endif; ?>
+
+<div class="calendar-list <?= $this->class; ?>">
+    <?php foreach ($this->months as $month): ?>
+        <div class="month-wrapper">
+            <div class="month-label"><?= $month['label']['month']; ?> <?= $month['label']['year']; ?></div>
+            <table class="month-calendar">
+                <thead>
+                <tr>
+                    <?php foreach ($month['days'] as $day): ?>
+                        <td><?= $day; ?></td>
+                    <?php endforeach; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($month['weeks'] as $week): ?>
+                    <tr>
+                        <?php foreach ($week as $day): ?>
+                            <td class="<?= $day['class']; ?>"><?= $day['day']; ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php $this->endblock(); ?>

@@ -1,0 +1,7 @@
+<div class="vacancy-calendar-reservation">
+    <?= $this->begin; ?> - <?= $this->end; ?>
+    <br/><br/>
+    <b><?= $this->title; ?></b>
+    <br><br>
+    <?= $this->note; ?>
+</div>

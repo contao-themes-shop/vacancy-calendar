@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: false
+    autoconfigure: false
+
+  ContaoThemesShop\VacancyCalendar\Model\ReservationRepository:
+    arguments:
+      - '@database_connection'
+    tags:
+      - { name: 'netzmacht.contao_toolkit.repository', model: 'ContaoThemesShop\VacancyCalendar\Model\ReservationModel' }
+
+  ContaoThemesShop\VacancyCalendar\Model\CalendarRepository:
+    arguments:
+      - '@database_connection'
+    tags:
+      - { name: 'netzmacht.contao_toolkit.repository', model: 'ContaoThemesShop\VacancyCalendar\Model\CalendarModel' }
