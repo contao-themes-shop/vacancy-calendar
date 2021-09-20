@@ -8,3 +8,6 @@
 
 # IDE
 /.idea/
+
+# OS
+.DS_STORE
