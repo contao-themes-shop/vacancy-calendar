@@ -17,4 +17,4 @@ freien, belegten und leeren Tage Farben konfiguriert werden.
 
 ### Finanzierung
 
-Dieses Modul wurde finanziert von ...
+Dieses Modul wurde finanziert von Thomas Birkmeyer, Dienstleistung für Mediengestaltung im Print & Digitalbereich.
