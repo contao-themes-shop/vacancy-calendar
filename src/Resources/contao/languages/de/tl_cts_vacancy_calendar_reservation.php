@@ -30,7 +30,7 @@ $GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['end'] = [
 ];
 
 $GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['note'] = [
-    'Anmkerungen',
+    'Anmerkungen',
     'Bitte geben Sie die Anmerkungen zu der Reservierung ein.',
 ];
 

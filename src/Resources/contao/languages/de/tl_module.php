@@ -45,6 +45,6 @@ $GLOBALS['TL_LANG']['tl_module']['vc_color_vacant'] = [
 ];
 
 $GLOBALS['TL_LANG']['tl_module']['vc_color_full'] = [
-    'Farbe voll',
-    'Bitte wählen Sie die Farbe für volle tage aus.',
+    'Farbe belegt',
+    'Bitte wählen Sie die Farbe für belegte Tage aus.',
 ];
