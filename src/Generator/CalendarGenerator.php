@@ -53,8 +53,7 @@ final class CalendarGenerator
         }
 
         $week = 1;
-
-        for ($i = 1; $i < $month->dayOfWeek; $i++) {
+        for ($i = 1; $i < ($month->dayOfWeek === 0 ? 7 : $month->dayOfWeek); $i++) {
             $data['weeks'][$week][] = ['class' => 'empty'];
         }
 
