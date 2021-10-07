@@ -112,7 +112,13 @@ final class CalendarGenerator
         $begin = Carbon::createFromTimestamp((int) $reservationModel->begin);
         $end   = Carbon::createFromTimestamp((int) $reservationModel->end);
 
-        $this->reservations[$begin->format(self::dateFormat)] = 1;
+        if ($begin->eq($end)) {
+            $this->reservations[$begin->format(self::dateFormat)] = 2;
+            return;
+        }
+
+        $this->reservations[$begin->format(self::dateFormat)] =
+            array_key_exists($begin->format(self::dateFormat), $this->reservations) ? 2 : 1;
         $this->reservations[$end->format(self::dateFormat)]   = 1;
 
         $day     = clone $begin;
