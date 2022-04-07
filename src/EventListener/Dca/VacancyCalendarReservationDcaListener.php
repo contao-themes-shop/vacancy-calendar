@@ -77,7 +77,8 @@ final class VacancyCalendarReservationDcaListener
         $existingDates = $this->reservationRepository->findExistingDate(
             (int) $dataContainer->activeRecord->begin,
             (int) $dataContainer->activeRecord->end,
-            (int) $dataContainer->activeRecord->id
+            (int) $dataContainer->activeRecord->id,
+            (int) $dataContainer->activeRecord->pid
         );
 
         if (0 === $existingDates) {
