@@ -37,7 +37,7 @@ class ReservationRepository extends ContaoRepository
         return $this->connection;
     }
 
-    public function findExistingDate(int $begin, int $end, int $currentId): int
+    public function findExistingDate(int $begin, int $end, int $currentId, int $calendarId): int
     {
         $queryBuilder = $this->connection->createQueryBuilder();
 
@@ -51,6 +51,7 @@ class ReservationRepository extends ContaoRepository
             ->setParameter('begin', $begin)
             ->setParameter('end', $end)
             ->andWhere($queryBuilder->expr()->neq('tcvcr.id', ':currentId'))
+            ->andWhere($queryBuilder->expr()->eq('tcvcr.pid', $calendarId))
             ->setParameter('currentId', $currentId)
         ;
 
