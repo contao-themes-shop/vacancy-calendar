@@ -34,25 +34,18 @@ final class VacancyCalendarController extends AbstractFrontendModuleController
 
     private $reservationRepository;
 
-    public function __construct(
-        TemplateRenderer $templateRenderer,
-        RequestScopeMatcher $scopeMatcher,
-        ResponseTagger $responseTagger,
-        RouterInterface $router,
-        TranslatorInterface $translator,
-        CalendarRepository $calendarRepository,
-        ReservationRepository $reservationRepository
-    ) {
+    public function __construct(TemplateRenderer $templateRenderer, RequestScopeMatcher $scopeMatcher, ResponseTagger $responseTagger, RouterInterface $router, TranslatorInterface $translator, CalendarRepository $calendarRepository, ReservationRepository $reservationRepository)
+    {
         parent::__construct($templateRenderer, $scopeMatcher, $responseTagger, $router, $translator);
 
-        $this->calendarRepository    = $calendarRepository;
+        $this->calendarRepository = $calendarRepository;
         $this->reservationRepository = $reservationRepository;
     }
 
     public function prepareTemplateData(array $data, Request $request, Model $model): array
     {
-        $calendar          = $this->calendarRepository->find((int) $model->vc_calendar);
-        $reservations      = $this->reservationRepository->findByCalendar((int) $model->vc_calendar);
+        $calendar = $this->calendarRepository->find((int) $model->vc_calendar);
+        $reservations = $this->reservationRepository->findByCalendar((int) $model->vc_calendar);
         $calendarGenerator = new CalendarGenerator($this->translator);
         $calendarGenerator->addReservations($reservations);
 
@@ -66,9 +59,9 @@ final class VacancyCalendarController extends AbstractFrontendModuleController
             );
         }
 
-        $data['title']  = $calendar->title;
+        $data['title'] = $calendar->title;
         $data['months'] = $months;
-        $data['class']  = sprintf('vacancy-calendar-%s', $model->id);
+        $data['class'] = sprintf('vacancy-calendar-%s', $model->id);
         $data['styles'] = $this->prepareStyles($model);
 
         return $data;
@@ -81,7 +74,7 @@ final class VacancyCalendarController extends AbstractFrontendModuleController
         }
 
         $colorFields = ['vc_color_empty', 'vc_color_vacant', 'vc_color_full', 'vc_color_option'];
-        $styles      = [];
+        $styles = [];
 
         foreach ($colorFields as $colorField) {
             $styles[$colorField] = StringUtil::deserialize($model->{$colorField});

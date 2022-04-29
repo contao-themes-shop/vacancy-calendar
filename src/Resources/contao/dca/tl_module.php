@@ -20,7 +20,7 @@ $GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['vc_add_style'] = [
     'vc_color_empty',
     'vc_color_vacant',
     'vc_color_full',
-    'vc_color_option'
+    'vc_color_option',
 ];
 
 // Fields
