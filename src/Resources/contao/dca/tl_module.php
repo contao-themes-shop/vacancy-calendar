@@ -16,7 +16,12 @@ $GLOBALS['TL_DCA']['tl_module']['metapalettes']['vacancy_calendar'] = [
     'expert' => ['guests', 'cssID'],
 ];
 
-$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['vc_add_style'] = ['vc_color_empty', 'vc_color_vacant', 'vc_color_full'];
+$GLOBALS['TL_DCA']['tl_module']['metasubpalettes']['vc_add_style'] = [
+    'vc_color_empty',
+    'vc_color_vacant',
+    'vc_color_full',
+    'vc_color_option'
+];
 
 // Fields
 $GLOBALS['TL_DCA']['tl_module']['fields']['vc_calendar'] = [
@@ -85,6 +90,20 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['vc_color_vacant'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['vc_color_full'] = [
+    'inputType' => 'text',
+    'eval' => [
+        'maxlength' => 6,
+        'multiple' => true,
+        'size' => 2,
+        'colorpicker' => true,
+        'isHexColor' => true,
+        'decodeEntities' => true,
+        'tl_class' => 'w50 wizard',
+    ],
+    'sql' => ['type' => 'string', 'length' => 64, 'default' => ''],
+];
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['vc_color_option'] = [
     'inputType' => 'text',
     'eval' => [
         'maxlength' => 6,

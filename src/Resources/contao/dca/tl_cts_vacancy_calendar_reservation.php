@@ -59,7 +59,7 @@ $GLOBALS['TL_DCA']['tl_cts_vacancy_calendar_reservation'] = [
 
     'metapalettes' => [
         'default' => [
-            'reservation' => ['title'],
+            'reservation' => ['title', 'isOption'],
             'date' => ['begin', 'end'],
             'note' => ['note'],
         ],
@@ -95,6 +95,15 @@ $GLOBALS['TL_DCA']['tl_cts_vacancy_calendar_reservation'] = [
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql' => ['type' => 'integer', 'length' => 10, 'default' => '0'],
+        ],
+        'isOption' => [
+            'exclude' => true,
+            'filter' => true,
+            'inputType' => 'checkbox',
+            'eval' => [
+                'tl_class' => 'w50 m12',
+            ],
+            'sql' => ['type' => 'boolean', 'default' => 0],
         ],
         'note' => [
             'exclude' => true,

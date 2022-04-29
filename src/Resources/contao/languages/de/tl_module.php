@@ -48,3 +48,8 @@ $GLOBALS['TL_LANG']['tl_module']['vc_color_full'] = [
     'Farbe belegt',
     'Bitte wählen Sie die Farbe für belegte Tage aus.',
 ];
+
+$GLOBALS['TL_LANG']['tl_module']['vc_color_option'] = [
+    'Farbe optional',
+    'Bitte wählen Sie die Farbe für optionale Reservierungen aus.',
+];

@@ -10,13 +10,18 @@ declare(strict_types=1);
  */
 
 $GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['reservation_legend'] = 'Reservierung';
-$GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['date_legend'] = 'Datum / Zeitraum';
-$GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['note_legend'] = 'Anmerkungen';
+$GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['date_legend']        = 'Datum / Zeitraum';
+$GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['note_legend']        = 'Anmerkungen';
 
 // Fields
 $GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['title'] = [
     'Bezeichnung',
     'Bitte geben Sie eine Bezeichnung für die Reservierung ein.',
+];
+
+$GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['isOption'] = [
+    'Optionale Reservierung',
+    'Bitte wählen Sie ob die Reservierung als optional dargestellt werden soll.',
 ];
 
 $GLOBALS['TL_LANG']['tl_cts_vacancy_calendar_reservation']['begin'] = [
