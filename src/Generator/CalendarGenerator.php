@@ -29,7 +29,7 @@ final class CalendarGenerator
         $this->translator = $translator;
     }
 
-    public function generateMonth(int $month, bool $monthShort, bool $dayShort) : array
+    public function generateMonth(int $month, bool $monthShort, bool $dayShort): array
     {
         $currentMonth  = (new Carbon())->month;
         $month         = Carbon::createFromDate(null, ($currentMonth + $month), 1);
@@ -61,31 +61,40 @@ final class CalendarGenerator
         do {
             $dayBefore = clone $day->subDay();
             $dayAfter  = clone $day->addDay();
-            $classes   = [];
+            $class = '';
 
             if (is_array($this->reservations[$day->format(self::dateFormat)]) === false) {
-                $classes[] = 'vacant';
+                $class = 'vacant';
             } else {
                 if ($this->reservations[$day->format(self::dateFormat)]['state'] == 1) {
                     if ($this->reservations[$dayBefore->format(self::dateFormat)]['state'] <= 1) {
-                        $classes[] = 'begin';
-                        $classes = array_merge($classes, $this->reservations[$day->format(self::dateFormat)]['additionalClasses']);
-
+                        $class = 'begin';
                     } elseif ($this->reservations[$dayAfter->format(self::dateFormat)]['state'] < 2) {
-                        $classes[] = 'end';
-                        $classes = array_merge($classes, $this->reservations[$day->format(self::dateFormat)]['additionalClasses']);
-
+                        $class = 'end';
                     } else {
-                        $classes[] = 'full';
-                        $classes = array_merge($classes, $this->reservations[$day->format(self::dateFormat)]['additionalClasses']);
+                        $class = 'full';
+                    }
+                } elseif ($this->reservations[$day->format(self::dateFormat)]['state'] > 1) {
+                    $class = 'full';
+                    if($this->reservations[$day->format(self::dateFormat)]['state'] > 1
+                        && ($this->reservations[$day->format(self::dateFormat)]['isOption'] === true
+                            && $this->reservations[$dayBefore->format(self::dateFormat)]['isOption'] === false)) {
+                        $class = 'regular-option';
                     }
 
-                } elseif ($this->reservations[$day->format(self::dateFormat)]['state'] > 1) {
-                    $classes[] = 'full';
+                    if($this->reservations[$day->format(self::dateFormat)]['state'] > 1
+                        && ($this->reservations[$day->format(self::dateFormat)]['isOption'] === false
+                            && $this->reservations[$dayBefore->format(self::dateFormat)]['isOption'] === true)) {
+                        $class = 'option-regular';
+                    }
+                }
+
+                if($this->reservations[$day->format(self::dateFormat)]['isOption'] === true) {
+                    $class .= ' is-option';
                 }
             }
 
-            $data['weeks'][$week][] = ['class' => implode(' ', $classes), 'day' => $day->day];
+            $data['weeks'][$week][] = ['class' => $class, 'day' => $day->day];
 
             if (count($data['weeks'][$week]) === 7) {
                 $week++;
@@ -106,7 +115,7 @@ final class CalendarGenerator
         return $data;
     }
 
-    public function addReservations(?Collection $reservations) : void
+    public function addReservations(?Collection $reservations): void
     {
         foreach ($reservations ?? [] as $reservation) {
             $this->addReservation($reservation);
@@ -115,7 +124,7 @@ final class CalendarGenerator
         ksort($this->reservations);
     }
 
-    public function addReservation(ReservationModel $reservationModel) : void
+    public function addReservation(ReservationModel $reservationModel): void
     {
         $begin = Carbon::createFromTimestamp((int) $reservationModel->begin);
         $end   = Carbon::createFromTimestamp((int) $reservationModel->end);
@@ -152,19 +161,8 @@ final class CalendarGenerator
     private function addToReservations(string $date, int $state, ReservationModel $reservationModel): void
     {
         $this->reservations[$date] = [
-            'state'             => $state,
-            'additionalClasses' => $this->addAdditionalClasses($reservationModel),
+            'state'    => $state,
+            'isOption' => (bool) $reservationModel->isOption,
         ];
-    }
-
-    private function addAdditionalClasses(ReservationModel $reservationModel): array
-    {
-        $additionalClasses = [];
-
-        if ((bool) $reservationModel->isOption === true) {
-            $additionalClasses[] = 'is-option';
-        }
-
-        return $additionalClasses;
     }
 }
