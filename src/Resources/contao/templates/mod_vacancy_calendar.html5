@@ -21,8 +21,10 @@
         }
 
         .<?= $this->class; ?> .end {
-            background-image: -webkit-linear-gradient(30deg, #<?= $this->styles['vc_color_full'][0]; ?> 50%, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%);
+            background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_full'][0]; ?> 50%, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%);
         }
+
+        <?php if($this->styles['vc_color_option'][0] !== ''): ?>
 
         .<?= $this->class; ?> .full.is-option {
             background-color: #<?= $this->styles['vc_color_option'][0]; ?>;
@@ -33,16 +35,18 @@
         }
 
         .<?= $this->class; ?> .end.is-option {
-            background-image: -webkit-linear-gradient(30deg, #<?= $this->styles['vc_color_option'][0]; ?> 50%, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%);
+            background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_option'][0]; ?> 50%, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%);
         }
 
         .<?= $this->class; ?> .regular-option {
-            background-image: -webkit-linear-gradient(180deg, #<?= $this->styles['vc_color_option'][0]; ?> 50%, #<?= $this->styles['vc_color_full'][0]; ?> 50%);
+            background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_full'][0]; ?> 50%, #<?= $this->styles['vc_color_option'][0]; ?>  50%);
         }
 
         .<?= $this->class; ?> .option-regular {
-            background-image: -webkit-linear-gradient(180deg, #<?= $this->styles['vc_color_full'][0]; ?> 50%, #<?= $this->styles['vc_color_option'][0]; ?> 50%);
+            background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_option'][0]; ?> 50%, #<?= $this->styles['vc_color_full'][0]; ?> 50%);
         }
+
+        <?php endif; ?>
     </style>
 <?php endif; ?>
 
