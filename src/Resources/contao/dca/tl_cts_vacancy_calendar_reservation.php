@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_cts_vacancy_calendar_reservation'] = [
             'delete' => [
                 'href' => 'act=delete',
                 'icon' => 'delete.svg',
-                'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                'attributes' => 'onclick="if(!confirm(\''.($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null)
                     .'\'))return false;Backend.getScrollOffset()"',
             ],
         ],
