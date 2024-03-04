@@ -2,50 +2,38 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of contao-themes-shop/vacancy-calendar.
- *
- * (c) Christopher Boelter - Contao Themes Shop
- *
- */
-
 namespace ContaoThemesShop\VacancyCalendar\Controller\FrontendModule;
 
-use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\Model;
+use Contao\ModuleModel;
 use Contao\StringUtil;
 use ContaoThemesShop\VacancyCalendar\Generator\CalendarGenerator;
 use ContaoThemesShop\VacancyCalendar\Model\CalendarRepository;
 use ContaoThemesShop\VacancyCalendar\Model\ReservationRepository;
-use Netzmacht\Contao\Toolkit\Controller\FrontendModule\AbstractFrontendModuleController;
-use Netzmacht\Contao\Toolkit\Response\ResponseTagger;
-use Netzmacht\Contao\Toolkit\Routing\RequestScopeMatcher;
-use Netzmacht\Contao\Toolkit\View\Template\TemplateRenderer;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @FrontendModule("vacancy_calendar", category="miscellaneous")
- */
+use function sprintf;
+
+/** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+#[AsFrontendModule(category: 'miscellaneous', name: 'vacancy_calendar', template: 'mod_vacancy_calendar')]
 final class VacancyCalendarController extends AbstractFrontendModuleController
 {
-    private $calendarRepository;
-
-    private $reservationRepository;
-
-    public function __construct(TemplateRenderer $templateRenderer, RequestScopeMatcher $scopeMatcher, ResponseTagger $responseTagger, RouterInterface $router, TranslatorInterface $translator, CalendarRepository $calendarRepository, ReservationRepository $reservationRepository)
-    {
-        parent::__construct($templateRenderer, $scopeMatcher, $responseTagger, $router, $translator);
-
-        $this->calendarRepository = $calendarRepository;
-        $this->reservationRepository = $reservationRepository;
+    public function __construct(
+        private readonly CalendarRepository $calendars,
+        private readonly ReservationRepository $reservations,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
-    public function prepareTemplateData(array $data, Request $request, Model $model): array
+    protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
-        $calendar = $this->calendarRepository->find((int) $model->vc_calendar);
-        $reservations = $this->reservationRepository->findByCalendar((int) $model->vc_calendar);
+        $calendar          = $this->calendars->find((int) $model->vc_calendar);
+        $reservations      = $this->reservations->findByCalendar((int) $model->vc_calendar);
         $calendarGenerator = new CalendarGenerator($this->translator);
         $calendarGenerator->addReservations($reservations);
 
@@ -55,26 +43,26 @@ final class VacancyCalendarController extends AbstractFrontendModuleController
             $months[] = $calendarGenerator->generateMonth(
                 $i,
                 (bool) $model->vc_short_month,
-                (bool) $model->vc_short_day
+                (bool) $model->vc_short_day,
             );
         }
 
-        $data['title'] = $calendar->title;
-        $data['months'] = $months;
-        $data['class'] = sprintf('vacancy-calendar-%s', $model->id);
-        $data['styles'] = $this->prepareStyles($model);
+        $template->title  = $calendar->title;
+        $template->months = $months;
+        $template->classCalendar  = sprintf('vacancy-calendar-%s', $model->id);
+        $template->styles = $this->prepareStyles($model);
 
-        return $data;
+        return $template->getResponse();
     }
 
-    private function prepareStyles(Model $model): ?array
+    private function prepareStyles(Model $model): array|null
     {
-        if (false === (bool) $model->vc_add_style) {
+        if ((bool) $model->vc_add_style === false) {
             return null;
         }
 
         $colorFields = ['vc_color_empty', 'vc_color_vacant', 'vc_color_full', 'vc_color_option'];
-        $styles = [];
+        $styles      = [];
 
         foreach ($colorFields as $colorField) {
             $styles[$colorField] = StringUtil::deserialize($model->{$colorField});

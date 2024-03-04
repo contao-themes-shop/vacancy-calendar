@@ -2,13 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of contao-themes-shop/vacancy-calendar.
- *
- * (c) Christopher Boelter - Contao Themes Shop
- *
- */
-
 $GLOBALS['TL_LANG']['tl_module']['vc_calendar'] = [
     'Belegungskalender',
     'Bitte wählen Sie einen Belegungskalendar für die Ausgabe aus.',

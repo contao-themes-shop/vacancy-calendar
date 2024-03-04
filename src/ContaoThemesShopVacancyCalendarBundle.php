@@ -2,25 +2,22 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of contao-themes-shop/vacancy-calendar.
- *
- * (c) Christopher Boelter - Contao Themes Shop
- *
- */
-
 namespace ContaoThemesShop\VacancyCalendar;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+use function dirname;
+
 class ContaoThemesShopVacancyCalendarBundle extends Bundle
 {
-    /**
-     * @inheritdoc
-     */
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);
+    }
+
+    public function getPath(): string
+    {
+        return dirname(__DIR__);
     }
 }

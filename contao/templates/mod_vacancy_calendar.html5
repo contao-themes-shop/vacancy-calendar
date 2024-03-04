@@ -4,45 +4,45 @@
 
 <?php if ($this->styles): ?>
     <style>
-        .<?= $this->class; ?> .empty {
+        .<?= $this->classCalendar; ?> .empty {
             background-color: #<?= $this->styles['vc_color_empty'][0]; ?>;
         }
 
-        .<?= $this->class; ?> .vacant {
+        .<?= $this->classCalendar; ?> .vacant {
             background-color: #<?= $this->styles['vc_color_vacant'][0]; ?>;
         }
 
-        .<?= $this->class; ?> .full {
+        .<?= $this->classCalendar; ?> .full {
             background-color: #<?= $this->styles['vc_color_full'][0]; ?>;
         }
 
-        .<?= $this->class; ?> .begin {
+        .<?= $this->classCalendar; ?> .begin {
             background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%, #<?= $this->styles['vc_color_full'][0]; ?> 50%);
         }
 
-        .<?= $this->class; ?> .end {
+        .<?= $this->classCalendar; ?> .end {
             background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_full'][0]; ?> 50%, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%);
         }
 
         <?php if($this->styles['vc_color_option'][0] !== ''): ?>
 
-        .<?= $this->class; ?> .full.is-option {
+        .<?= $this->classCalendar; ?> .full.is-option {
             background-color: #<?= $this->styles['vc_color_option'][0]; ?>;
         }
 
-        .<?= $this->class; ?> .begin.is-option {
+        .<?= $this->classCalendar; ?> .begin.is-option {
             background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%, #<?= $this->styles['vc_color_option'][0]; ?> 50%);
         }
 
-        .<?= $this->class; ?> .end.is-option {
+        .<?= $this->classCalendar; ?> .end.is-option {
             background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_option'][0]; ?> 50%, #<?= $this->styles['vc_color_vacant'][0]; ?> 50%);
         }
 
-        .<?= $this->class; ?> .regular-option {
+        .<?= $this->classCalendar; ?> .regular-option {
             background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_full'][0]; ?> 50%, #<?= $this->styles['vc_color_option'][0]; ?>  50%);
         }
 
-        .<?= $this->class; ?> .option-regular {
+        .<?= $this->classCalendar; ?> .option-regular {
             background-image: -webkit-linear-gradient(-30deg, #<?= $this->styles['vc_color_option'][0]; ?> 50%, #<?= $this->styles['vc_color_full'][0]; ?> 50%);
         }
 
@@ -50,7 +50,7 @@
     </style>
 <?php endif; ?>
 
-<div class="calendar-list <?= $this->class; ?>">
+<div class="calendar-list <?= $this->classCalendar; ?>">
     <?php foreach ($this->months as $month): ?>
         <div class="month-wrapper">
             <div class="month-label"><?= $month['label']['month']; ?> <?= $month['label']['year']; ?></div>

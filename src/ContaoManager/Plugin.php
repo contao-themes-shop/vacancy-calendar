@@ -2,13 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of contao-themes-shop/vacancy-calendar.
- *
- * (c) Christopher Boelter - Contao Themes Shop
- *
- */
-
 namespace ContaoThemesShop\VacancyCalendar\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
@@ -19,27 +12,26 @@ use Contao\ManagerPlugin\Config\ConfigPluginInterface;
 use ContaoThemesShop\VacancyCalendar\ContaoThemesShopVacancyCalendarBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
+/** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
 class Plugin implements BundlePluginInterface, ConfigPluginInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getBundles(ParserInterface $parser): array
     {
         return [
             BundleConfig::create(ContaoThemesShopVacancyCalendarBundle::class)->setLoadAfter(
-                [ContaoCoreBundle::class]
+                [ContaoCoreBundle::class],
             ),
         ];
     }
 
-    /**
-     * @param array<mixed> $managerConfig
-     */
+    /** @param array<mixed> $managerConfig */
     public function registerContainerConfiguration(LoaderInterface $loader, array $managerConfig): void
     {
-        $loader->load('@ContaoThemesShopVacancyCalendarBundle/Resources/config/listeners.yaml');
-        $loader->load('@ContaoThemesShopVacancyCalendarBundle/Resources/config/repositories.yaml');
-        $loader->load('@ContaoThemesShopVacancyCalendarBundle/Resources/config/modules.yaml');
+        $loader->load(__DIR__ . '/../../config/listeners.yaml');
+        $loader->load(__DIR__ . '/../../config/repositories.yaml');
+        $loader->load(__DIR__ . '/../../config/modules.yaml');
     }
 }

@@ -1,14 +1,14 @@
 services:
   _defaults:
     autowire: false
-    autoconfigure: false
+    autoconfigure: true
 
-  ContaoThemesShop\VacancyCalendar\EventListener\Dca\VacancyCalendarReservationDcaListener:
+  ContaoThemesShop\VacancyCalendar\EventListener\DataContainer\VacancyCalendarReservationDcaListener:
     arguments:
       - '@netzmacht.contao_toolkit.template_renderer'
-      - '@netzmacht.contao_toolkit.contao.input_adapter'
       - '@netzmacht.contao_toolkit.contao.message_adapter'
       - '@netzmacht.contao_toolkit.contao.system_adapter'
       - '@netzmacht.contao_toolkit.contao.controller_adapter'
       - '@translator'
       - '@ContaoThemesShop\VacancyCalendar\Model\ReservationRepository'
+      - '@Codefog\HasteBundle\Formatter'

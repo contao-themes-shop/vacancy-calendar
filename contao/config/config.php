@@ -2,18 +2,13 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of contao-themes-shop/vacancy-calendar.
- *
- * (c) Christopher Boelter - Contao Themes Shop
- *
- */
+use Contao\ArrayUtil;
 
-if (!array_key_exists('content', $GLOBALS['BE_MOD'])) {
+if (! array_key_exists('content', $GLOBALS['BE_MOD'])) {
     $GLOBALS['BE_MOD']['content'] = [];
 }
 
-array_insert(
+ArrayUtil::arrayInsert(
     $GLOBALS['BE_MOD']['content'],
     count($GLOBALS['BE_MOD']['content']),
     [

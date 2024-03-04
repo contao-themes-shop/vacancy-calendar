@@ -2,13 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of contao-themes-shop/vacancy-calendar.
- *
- * (c) Christopher Boelter - Contao Themes Shop
- *
- */
-
 namespace ContaoThemesShop\VacancyCalendar\Model;
 
 use Contao\Model\Collection;
@@ -18,21 +11,14 @@ use Netzmacht\Contao\Toolkit\Data\Model\ContaoRepository;
 class ReservationRepository extends ContaoRepository
 {
     /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * {@inheritDoc}
      */
-    public function __construct(Connection $connection)
+    public function __construct(private readonly Connection $connection)
     {
         parent::__construct(ReservationModel::class);
-
-        $this->connection = $connection;
     }
 
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->connection;
     }
@@ -46,19 +32,18 @@ class ReservationRepository extends ContaoRepository
             ->from(ReservationModel::getTable(), 'tcvcr')
             ->where($queryBuilder->expr()->or(
                 ':begin BETWEEN tcvcr.begin AND tcvcr.end',
-                ':end BETWEEN tcvcr.begin AND tcvcr.end'
+                ':end BETWEEN tcvcr.begin AND tcvcr.end',
             ))
             ->setParameter('begin', $begin)
             ->setParameter('end', $end)
             ->andWhere($queryBuilder->expr()->neq('tcvcr.id', ':currentId'))
             ->andWhere($queryBuilder->expr()->eq('tcvcr.pid', $calendarId))
-            ->setParameter('currentId', $currentId)
-        ;
+            ->setParameter('currentId', $currentId);
 
-        return $queryBuilder->execute()->rowCount();
+        return $queryBuilder->executeQuery()->rowCount();
     }
 
-    public function findByCalendar(int $calendarId): ?Collection
+    public function findByCalendar(int $calendarId): Collection|null
     {
         return $this->findBy(['.pid=?'], [$calendarId], ['order' => 'begin ASC']);
     }

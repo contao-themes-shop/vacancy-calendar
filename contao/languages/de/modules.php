@@ -2,13 +2,6 @@
 
 declare(strict_types=1);
 
-/*
- * This file is part of contao-themes-shop/vacancy-calendar.
- *
- * (c) Christopher Boelter - Contao Themes Shop
- *
- */
-
 // Backend modules
 $GLOBALS['TL_LANG']['MOD']['cts_vacancy_calendar'] = [
     'Belegungspläne',

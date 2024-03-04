@@ -1,13 +1,17 @@
 # Composer
-/composer.lock
-/vendor/
+/vendor
+composer.lock
 
-# PhpUnit
-/.phpunit.result.cache
-/phpunit.xml
+# PHPCQ
+/.phpcq/*
+!/.phpcq/local
+.phpcq.lock
+.phpcs-cache
+.phpunit.result.cache
 
-# IDE
-/.idea/
+# NPM
+/node_modules
+/*/node_modules
 
-# OS
-.DS_STORE
+# local config
+*.local
