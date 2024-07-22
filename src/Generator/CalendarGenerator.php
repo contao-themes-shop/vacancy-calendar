@@ -77,10 +77,12 @@ final class CalendarGenerator
             $dayAfter  = clone $day->addDay();
             $class     = '';
 
-            if (is_array($this->reservations[$day->format(self::DATE_FORMAT)]) === false) {
+            if (isset($this->reservations[$day->format(self::DATE_FORMAT)]) === false
+                || is_array($this->reservations[$day->format(self::DATE_FORMAT)]) === false) {
                 $class = 'vacant';
             } else {
-                if ($this->reservations[$day->format(self::DATE_FORMAT)]['state'] === 1) {
+                if (isset($this->reservations[$day->format(self::DATE_FORMAT)])
+                    && $this->reservations[$day->format(self::DATE_FORMAT)]['state'] === 1) {
                     if ($this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'] <= 1) {
                         $class = 'begin';
                     } elseif ($this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'] < 2) {
@@ -88,7 +90,8 @@ final class CalendarGenerator
                     } else {
                         $class = 'full';
                     }
-                } elseif ($this->reservations[$day->format(self::DATE_FORMAT)]['state'] > 1) {
+                } elseif (isset($this->reservations[$day->format(self::DATE_FORMAT)])
+                    && $this->reservations[$day->format(self::DATE_FORMAT)]['state'] > 1) {
                     $class = 'full';
 
                     if (
@@ -108,7 +111,8 @@ final class CalendarGenerator
                     }
                 }
 
-                if ($this->reservations[$day->format(self::DATE_FORMAT)]['isOption'] === true) {
+                if (isset($this->reservations[$day->format(self::DATE_FORMAT)])
+                    && $this->reservations[$day->format(self::DATE_FORMAT)]['isOption'] === true) {
                     $class .= ' is-option';
                 }
             }
