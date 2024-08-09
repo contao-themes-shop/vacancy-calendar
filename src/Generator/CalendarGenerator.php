@@ -66,7 +66,7 @@ final class CalendarGenerator
         $week = 1;
 
         for ($i = 1; $i < ($month->dayOfWeek === 0 ? 7 : $month->dayOfWeek); ++$i) {
-            $data['weeks'][$week][] = ['class' => 'empty'];
+            $data['weeks'][$week][] = ['class' => 'empty', 'day' => ''];
         }
 
         $day = clone $month;
@@ -82,9 +82,11 @@ final class CalendarGenerator
             } else {
                 if (isset($this->reservations[$day->format(self::DATE_FORMAT)])
                     && $this->reservations[$day->format(self::DATE_FORMAT)]['state'] === 1) {
-                    if ($this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'] <= 1) {
+                    if (!isset($this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'])
+                        || $this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'] <= 1) {
                         $class = 'begin';
-                    } elseif ($this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'] < 2) {
+                    } elseif (!isset($this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'])
+                        || $this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'] < 2) {
                         $class = 'end';
                     } else {
                         $class = 'full';
@@ -130,7 +132,7 @@ final class CalendarGenerator
 
         if ($remainingDays < 7 && $remainingDays > 0) {
             for ($i = 1; $i <= 7 - $remainingDays; ++$i) {
-                $data['weeks'][$week][] = ['class' => 'empty'];
+                $data['weeks'][$week][] = ['class' => 'empty', 'day' => ''];
             }
         }
 
