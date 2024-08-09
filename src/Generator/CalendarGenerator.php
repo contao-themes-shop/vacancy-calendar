@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace ContaoThemesShop\VacancyCalendar\Generator;
 
-use Carbon\Carbon;
 use Contao\Model\Collection;
+use ContaoThemesShop\VacancyCalendar\Carbon\CarbonLocalTimezone;
 use ContaoThemesShop\VacancyCalendar\Model\ReservationModel;
 use Symfony\Contracts\Translation\TranslatorInterface;
-
 use function array_key_exists;
 use function count;
 use function is_array;
@@ -34,8 +33,8 @@ final class CalendarGenerator
     /** @return mixed[] */
     public function generateMonth(int $month, bool $monthShort, bool $dayShort): array
     {
-        $currentMonth  = (new Carbon())->month;
-        $month         = Carbon::createFromDate(null, $currentMonth + $month, 1);
+        $currentMonth  = (CarbonLocalTimezone::create())->month;
+        $month         = CarbonLocalTimezone::createFromDate(null, $currentMonth + $month, 1);
         $monthLabelKey = $monthShort ? 'MONTHS_SHORT' : 'MONTHS';
         $dayLabelKey   = $dayShort ? 'DAYS_SHORT' : 'DAYS';
 
@@ -149,8 +148,8 @@ final class CalendarGenerator
 
     public function addReservation(ReservationModel $reservationModel): void
     {
-        $begin = Carbon::createFromTimestamp((int) $reservationModel->begin);
-        $end   = Carbon::createFromTimestamp((int) $reservationModel->end);
+        $begin = CarbonLocalTimezone::createFromTimestamp((int) $reservationModel->begin);
+        $end   = CarbonLocalTimezone::createFromTimestamp((int) $reservationModel->end);
 
         if ($begin->eq($end)) {
             $this->addToReservations($begin->format(self::DATE_FORMAT), 2, $reservationModel);
@@ -185,7 +184,7 @@ final class CalendarGenerator
     private function addToReservations(string $date, int $state, ReservationModel $reservationModel): void
     {
         $this->reservations[$date] = [
-            'state' => $state,
+            'state'    => $state,
             'isOption' => (bool) $reservationModel->isOption,
         ];
     }
