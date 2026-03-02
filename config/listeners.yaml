@@ -19,3 +19,8 @@ services:
             - '@netzmacht.contao_toolkit.dca.manager'
             - '@request_stack'
             - '@database_connection'
+
+    ContaoThemesShop\VacancyCalendar\EventListener\DataContainer\ModuleDcaListener:
+        arguments:
+            - '@security.helper'
+            - '@ContaoThemesShop\VacancyCalendar\Model\CalendarRepository'
