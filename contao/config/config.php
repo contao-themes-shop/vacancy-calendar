@@ -17,3 +17,7 @@ ArrayUtil::arrayInsert(
         ],
     ]
 );
+
+// Add permissions
+$GLOBALS['TL_PERMISSIONS'][] = 'vc_vacancy_calendar';
+$GLOBALS['TL_PERMISSIONS'][] = 'vc_vacancy_calendar_permission';
