@@ -9,10 +9,14 @@ use Contao\StringUtil;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
-use Exception;
 use Netzmacht\Contao\Toolkit\Dca\DcaManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Throwable;
+
+use function in_array;
+use function is_array;
+use function serialize;
 
 final class VacancyCalendarDcaListener
 {
@@ -44,8 +48,9 @@ final class VacancyCalendarDcaListener
         $definition->set('list/sorting/root', $root);
     }
 
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
     #[AsCallback(table: 'tl_cts_vacancy_calendar', target: 'config.oncreate')]
-    public function onCreate(string $table, int $vacancyCalendarId)
+    public function onCreate(string $table, int $vacancyCalendarId): void
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return;
@@ -65,66 +70,74 @@ final class VacancyCalendarDcaListener
             return;
         }
 
-
         $sessionBag = $this->requestStack->getSession()->getBag('contao_backend');
-        $record        = $sessionBag->get('new_records');
+        $record     = $sessionBag->get('new_records');
 
-        if (is_array($record['tl_cts_vacancy_calendar']) && in_array($vacancyCalendarId, $record['tl_cts_vacancy_calendar'])) {
-            if ($user->inherit != 'custom') {
-
-                $queryBuilder = $this->connection->createQueryBuilder();
-                $queryBuilder
-                    ->select('tug.id', 'tug.vc_vacancy_calendar', 'tug.vc_vacancy_calendar_permission')
-                    ->from('tl_user_group', 'tug')
-                    ->where($queryBuilder->expr()->in('tug.id', ':groupIds'))
-                    ->setParameter('groupIds', $user->groups, ArrayParameterType::INTEGER);
-
-                $groups = $queryBuilder->executeQuery()->fetchAllAssociative();
-
-                foreach ($groups as $group) {
-                    $permissions = StringUtil::deserialize($group['vc_vacancy_calendar_permission']);
-
-                    if (is_array($permissions) && in_array('create', $permissions)) {
-                        $vacancyCalendars   = StringUtil::deserialize($group['vc_vacancy_calendar'], true);
-                        $vacancyCalendars[] = $vacancyCalendarId;
-
-                        try {
-                            $this->connection
-                                ->update(
-                                    'tl_user_group',
-                                    ['vc_vacancy_calendar' => serialize($vacancyCalendars)],
-                                    ['id' => $group['id']]
-                                );
-                        } catch (Exception $exception) {
-                        }
-                    }
-                }
-            }
-
-            if ($user->inherit != 'group') {
-                $queryBuilder
-                    ->select('tu.id', 'tu.vc_vacancy_calendar', 'tu.vc_vacancy_calendar_permission')
-                    ->from('tl_user', 'tu')
-                    ->where($queryBuilder->expr()->eq('tu.id', ':userId'))
-                    ->setParameter('userId', $user->id, ParameterType::INTEGER)
-                    ->setMaxResults(1);
-
-                $userRecord = $queryBuilder->executeQuery()->fetchAssociative();
-
-                $permissions = StringUtil::deserialize($userRecord['vc_vacancy_calendar_permission']);
-
-                if (is_array($permissions) && in_array('create', $permissions)) {
-                    $vacancyCalendars   = StringUtil::deserialize($userRecord['vc_vacancy_calendar'], true);
-                    $vacancyCalendars[] = $vacancyCalendarId;
-
-                    $this->connection->update('tl_user', ['vc_vacancy_calendar' => serialize($vacancyCalendars)],
-                        ['id' => $userRecord['id']]);
-                }
-            }
-
-            // Add the new element to the user object
-            $root[]                    = $vacancyCalendarId;
-            $user->vc_vacancy_calendar = $root;
+        if (
+            ! is_array($record['tl_cts_vacancy_calendar'])
+            || ! in_array($vacancyCalendarId, $record['tl_cts_vacancy_calendar'])
+        ) {
+            return;
         }
+
+        if ($user->inherit !== 'custom') {
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder
+                ->select('tug.id', 'tug.vc_vacancy_calendar', 'tug.vc_vacancy_calendar_permission')
+                ->from('tl_user_group', 'tug')
+                ->where($queryBuilder->expr()->in('tug.id', ':groupIds'))
+                ->setParameter('groupIds', $user->groups, ArrayParameterType::INTEGER);
+
+            $groups = $queryBuilder->executeQuery()->fetchAllAssociative();
+
+            foreach ($groups as $group) {
+                $permissions = StringUtil::deserialize($group['vc_vacancy_calendar_permission']);
+
+                if (! is_array($permissions) || ! in_array('create', $permissions)) {
+                    continue;
+                }
+
+                $vacancyCalendars   = StringUtil::deserialize($group['vc_vacancy_calendar'], true);
+                $vacancyCalendars[] = $vacancyCalendarId;
+
+                try {
+                    $this->connection
+                        ->update(
+                            'tl_user_group',
+                            ['vc_vacancy_calendar' => serialize($vacancyCalendars)],
+                            ['id' => $group['id']],
+                        );
+                } catch (Throwable) {
+                }
+            }
+        }
+
+        if ($user->inherit !== 'group') {
+            $queryBuilder
+                ->select('tu.id', 'tu.vc_vacancy_calendar', 'tu.vc_vacancy_calendar_permission')
+                ->from('tl_user', 'tu')
+                ->where($queryBuilder->expr()->eq('tu.id', ':userId'))
+                ->setParameter('userId', $user->id, ParameterType::INTEGER)
+                ->setMaxResults(1);
+
+            $userRecord = $queryBuilder->executeQuery()->fetchAssociative();
+
+            $permissions = StringUtil::deserialize($userRecord['vc_vacancy_calendar_permission']);
+
+            if (is_array($permissions) && in_array('create', $permissions)) {
+                $vacancyCalendars   = StringUtil::deserialize($userRecord['vc_vacancy_calendar'], true);
+                $vacancyCalendars[] = $vacancyCalendarId;
+
+                $this->connection->update(
+                    'tl_user',
+                    ['vc_vacancy_calendar' => serialize($vacancyCalendars)],
+                    ['id' => $userRecord['id']],
+                );
+            }
+        }
+
+        // Add the new element to the user object
+        $root[]                    = $vacancyCalendarId;
+        $user->vc_vacancy_calendar = $root;
     }
 }

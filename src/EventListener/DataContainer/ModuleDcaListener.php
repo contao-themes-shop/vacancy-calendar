@@ -9,6 +9,8 @@ use ContaoThemesShop\VacancyCalendar\Model\CalendarRepository;
 use ContaoThemesShop\VacancyCalendar\Security\VacancyCalendarPermissions;
 use Symfony\Bundle\SecurityBundle\Security;
 
+use function is_array;
+
 final class ModuleDcaListener
 {
     public function __construct(
@@ -17,6 +19,7 @@ final class ModuleDcaListener
     ) {
     }
 
+    /** @return array<int, string> */
     #[AsCallback(table: 'tl_module', target: 'fields.vc_calendar.options')]
     public function onOptions(): array
     {
@@ -30,8 +33,12 @@ final class ModuleDcaListener
         $options   = [];
 
         foreach ($calendars as $calendar) {
-            if ($this->security->isGranted(VacancyCalendarPermissions::USER_CAN_EDIT_VACANCY_CALENDAR,
-                    $calendar->id) === false) {
+            if (
+                $this->security->isGranted(
+                    VacancyCalendarPermissions::USER_CAN_EDIT_VACANCY_CALENDAR,
+                    $calendar->id,
+                ) === false
+            ) {
                 continue;
             }
 
