@@ -47,10 +47,10 @@ final class VacancyCalendarController extends AbstractFrontendModuleController
             );
         }
 
-        $template->title  = $calendar->title;
-        $template->months = $months;
-        $template->classCalendar  = sprintf('vacancy-calendar-%s', $model->id);
-        $template->styles = $this->prepareStyles($model);
+        $template->title         = $calendar->title;
+        $template->months        = $months;
+        $template->classCalendar = sprintf('vacancy-calendar-%s', $model->id);
+        $template->styles        = $this->prepareStyles($model);
 
         return $template->getResponse();
     }

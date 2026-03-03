@@ -8,6 +8,7 @@ use Contao\Model\Collection;
 use ContaoThemesShop\VacancyCalendar\Carbon\CarbonLocalTimezone;
 use ContaoThemesShop\VacancyCalendar\Model\ReservationModel;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
 use function array_key_exists;
 use function count;
 use function is_array;
@@ -33,7 +34,7 @@ final class CalendarGenerator
     /** @return mixed[] */
     public function generateMonth(int $month, bool $monthShort, bool $dayShort): array
     {
-        $currentMonth  = (CarbonLocalTimezone::create())->month;
+        $currentMonth  = CarbonLocalTimezone::create()->month;
         $month         = CarbonLocalTimezone::createFromDate(null, $currentMonth + $month, 1);
         $monthLabelKey = $monthShort ? 'MONTHS_SHORT' : 'MONTHS';
         $dayLabelKey   = $dayShort ? 'DAYS_SHORT' : 'DAYS';
@@ -76,23 +77,33 @@ final class CalendarGenerator
             $dayAfter  = clone $day->addDay();
             $class     = '';
 
-            if (isset($this->reservations[$day->format(self::DATE_FORMAT)]) === false
-                || is_array($this->reservations[$day->format(self::DATE_FORMAT)]) === false) {
+            if (
+                isset($this->reservations[$day->format(self::DATE_FORMAT)]) === false
+                || is_array($this->reservations[$day->format(self::DATE_FORMAT)]) === false
+            ) {
                 $class = 'vacant';
             } else {
-                if (isset($this->reservations[$day->format(self::DATE_FORMAT)])
-                    && $this->reservations[$day->format(self::DATE_FORMAT)]['state'] === 1) {
-                    if (!isset($this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'])
-                        || $this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'] <= 1) {
+                if (
+                    isset($this->reservations[$day->format(self::DATE_FORMAT)])
+                    && $this->reservations[$day->format(self::DATE_FORMAT)]['state'] === 1
+                ) {
+                    if (
+                        ! isset($this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'])
+                        || $this->reservations[$dayBefore->format(self::DATE_FORMAT)]['state'] <= 1
+                    ) {
                         $class = 'begin';
-                    } elseif (!isset($this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'])
-                        || $this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'] < 2) {
+                    } elseif (
+                        ! isset($this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'])
+                        || $this->reservations[$dayAfter->format(self::DATE_FORMAT)]['state'] < 2
+                    ) {
                         $class = 'end';
                     } else {
                         $class = 'full';
                     }
-                } elseif (isset($this->reservations[$day->format(self::DATE_FORMAT)])
-                    && $this->reservations[$day->format(self::DATE_FORMAT)]['state'] > 1) {
+                } elseif (
+                    isset($this->reservations[$day->format(self::DATE_FORMAT)])
+                    && $this->reservations[$day->format(self::DATE_FORMAT)]['state'] > 1
+                ) {
                     $class = 'full';
 
                     if (
@@ -112,8 +123,10 @@ final class CalendarGenerator
                     }
                 }
 
-                if (isset($this->reservations[$day->format(self::DATE_FORMAT)])
-                    && $this->reservations[$day->format(self::DATE_FORMAT)]['isOption'] === true) {
+                if (
+                    isset($this->reservations[$day->format(self::DATE_FORMAT)])
+                    && $this->reservations[$day->format(self::DATE_FORMAT)]['isOption'] === true
+                ) {
                     $class .= ' is-option';
                 }
             }

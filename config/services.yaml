@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: false
+        autoconfigure: true
+
+    ContaoThemesShop\VacancyCalendar\Security\Voter\VacancyCalendarAccessVoter:
+        arguments:
+            - '@security.access.decision_manager'
+
+    ContaoThemesShop\VacancyCalendar\Security\Voter\VacancyCalendarReservationAccessVoter:
+        arguments:
+            - '@security.access.decision_manager'

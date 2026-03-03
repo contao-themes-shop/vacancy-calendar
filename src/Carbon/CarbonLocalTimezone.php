@@ -33,7 +33,6 @@ class CarbonLocalTimezone
         $carbon = Carbon::createFromTimestampUTC($timestamp);
         $carbon->setTimezone(Config::get('timeZone'));
 
-
         return $timezone === null ? $carbon : $carbon->setTimezone($timezone);
     }
 }
