@@ -28,7 +28,7 @@ class ReservationRepository extends ContaoRepository
         $queryBuilder = $this->connection->createQueryBuilder();
 
         $queryBuilder
-            ->select(['tcvcr.id'])
+            ->select('tcvcr.id')
             ->from(ReservationModel::getTable(), 'tcvcr')
             ->where($queryBuilder->expr()->or(
                 ':begin BETWEEN tcvcr.begin AND tcvcr.end',
