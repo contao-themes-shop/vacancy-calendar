@@ -37,8 +37,9 @@ class ReservationRepository extends ContaoRepository
             ->setParameter('begin', $begin)
             ->setParameter('end', $end)
             ->andWhere($queryBuilder->expr()->neq('tcvcr.id', ':currentId'))
-            ->andWhere($queryBuilder->expr()->eq('tcvcr.pid', $calendarId))
-            ->setParameter('currentId', $currentId);
+            ->andWhere($queryBuilder->expr()->eq('tcvcr.pid', ':calendarId'))
+            ->setParameter('currentId', $currentId)
+            ->setParameter('calendarId', $calendarId);
 
         return $queryBuilder->executeQuery()->rowCount();
     }
